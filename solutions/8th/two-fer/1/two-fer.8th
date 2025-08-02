@@ -1,0 +1,10 @@
+\ given string on a stack, return a formatted output string
+: two-fer \ s -- s
+  \ handle null case, by consuming TOS with "if" and setting default "you"
+  null? if drop "you" then
+  \ handle empty string case, by consuming TOS with "if" and determine length of s
+  s:len 0 = if drop "you" then
+  \ format output with substitution and formatting in string namespace
+  "One for %s, one for me." s:strfmt 
+;
+
