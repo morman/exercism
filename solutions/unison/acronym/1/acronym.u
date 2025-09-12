@@ -1,0 +1,35 @@
+-- abbreviate method of acroym namespace receives Text and returns Text
+acronym.abbreviate : Text -> Text
+-- TODO: recursively split the incoming string into an array of words, pull first, capitalize, and concatenate
+-- NOTE: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.
+acronym.abbreviate test = 
+    -- pipe the test input through chained functions
+    Text.toCharList test
+        -- split the list on spaces or hyphens _OR_ _UNDERSCORES_
+        -- That's a dirty trick: underscores were _NOT_ specified in the README
+        |> List.split (char -> elem char [?\s, ?-, ?_])
+        -- take the head of each word and accumulate it
+        |> List.filterMap List.head
+        -- flatten the accumulated character List into a Text string
+        |> Text.fromCharList
+        -- uppercase the Text string
+        |> Text.toUppercase
+
+---
+Below the fold!
+
+Apparently we need to use "base.Text.toCharList" to convert the
+incoming text string into an array of characters, which will
+should recursively examine via guards
+
+Here are whitespace literals: https://www.unison-lang.org/learn/language-reference/escape-sequences/
+So we need to match on "?_" and "?\s"
+
+I kind of want to use "base.Text.split" but that might be too soon
+
+We have "base.Text.fromCharList" to reconsitute list into a string
+we also have the "base.Text.toUppercase" method to use at the end
+
+Some exxamples here: 
+
+https://itnext.io/processing-dna-strings-with-unison-e18db6180e42

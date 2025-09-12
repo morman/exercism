@@ -1,0 +1,40 @@
+unique type dndCharacter.Character = { strength : Nat
+                                     , dexterity : Nat
+                                     , constitution : Nat
+                                     , intelligence : Nat
+                                     , wisdom : Nat
+                                     , charisma : Nat
+                                     , hitpoints : Nat
+                                     }
+
+dndCharacter.modifier : Nat -> Int
+dndCharacter.modifier score =
+  -- cast Nat score to Int, subtract 10 from score, divide by 2, using flooring
+  -- "main.Int./ is flooring integer division" per https://share.unison-lang.org/@unison/p/code/latest/namespaces/public/;/types/@@Int
+  (toInt score - +10 / +2)
+  
+dndCharacter.ability_ : '{Random} Nat
+dndCharacter.ability_ = do
+  '(Random.natIn 1 7) -- generate a random number between 1 and 6, because actually 0 to 0.999 etc.
+    |> List.replicate 4 -- do this four times
+    |> List.sort -- sort lowest to highest
+    |> List.slice 1 4 -- slice of 3 highest numbers of 4, because zero-based indexing
+    |> Nat.sum -- add the 3 sliced randoms
+
+dndCharacter.character : '{Random} Character
+dndCharacter.character = do
+  str = !ability_
+  dex = !ability_
+  con = !ability_
+  int = !ability_
+  wis = !ability_
+  cha = !ability_
+  hps = Int.abs (+10 + modifier con) -- hps are 10 +/- con modifier
+  Character
+    str
+    dex
+    con
+    int
+    wis
+    cha
+    hps

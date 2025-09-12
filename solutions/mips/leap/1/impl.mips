@@ -1,0 +1,52 @@
+## Registers
+
+# | Register | Usage     | Type    | Description                                      |
+# | -------- | --------- | ------- | ------------------------------------------------ |
+# | `$a0`    | input     | integer | year to check                                    |
+# | `$v0`    | output    | boolean | input is leap year (`0` = `false`, `1` = `true`) |
+# | `$t0-9`  | temporary | any     | used for temporary storage                       |
+
+.globl is_leap_year
+
+# test if input year is leap year
+is_leap_year:
+    # load intermediate "false" value for output into output register
+    li $v0, 0
+
+    # test if divisible by 400
+    # temporarily store the reminder in the first temp register
+    rem $t0, $a0, 400
+    # branch to true if remainder is equal to zero
+    beqz $t0, true
+
+    # test if divisible by 100
+    # temporarily re-store the reminder in the first temp register
+    rem $t0, $a0, 100
+    # branch to false if remainder equal to zero
+    beqz $t0, false
+
+    # test if divisible by 4
+    # temporarily re-store the reminder in the first temp register
+    rem $t0, $a0, 4
+    # branch to true if remainder equal to zero
+    beqz $t0, true
+
+    # test if not divisible by 4
+    # branch to true if remainder equal to zero
+    bnez $t0, false
+
+# true case
+true:
+    # set return to true
+    li $v0, 1
+    # jump to return
+    j return
+# false case
+false:
+    # set return to false
+    li $v0, 0
+    # jump to return
+    j return
+return:
+    # jump to return address
+    jr $ra

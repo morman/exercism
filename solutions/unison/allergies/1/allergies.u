@@ -1,0 +1,46 @@
+-- define a dictionary of allergens and their values
+allergens = [
+  ("eggs", 1),
+  ("peanuts", 2),
+  ("shellfish", 4),
+  ("strawberries", 8),
+  ("tomatoes", 16),
+  ("chocolate", 32),
+  ("pollen", 64),
+  ("cats", 128)
+]
+
+-- convert dictionary to map
+allergensMap = List.toMap allergens
+
+-- Text of allergen is converted to Natural number and then Boolean
+allergies.allergicTo : Text -> Nat -> Boolean
+allergies.allergicTo allergen score =
+  -- match allergen to allergens, getting number and comparing it to score
+  match Map.get allergen allergensMap with
+    -- guard when we have elements with a score 
+      None -> false
+      -- does bitwise "and" prove this allergenValue is inside score?
+      Some allergenValue -> (and allergenValue score) > 0 
+
+allergies.list : Nat -> [Text]
+allergies.list score =
+  -- TODO: iterate over allergens dictionary, finding matches
+  -- Attempt simple mapping case
+  match score with
+    1 -> ["eggs"]
+    2 -> ["peanuts"]
+    4 -> ["shellfish"]
+    8 -> ["strawberries"]
+    16 -> ["tomatoes"]
+    32 -> ["chocolate"]
+    64 -> ["pollen"]
+    128 -> ["cats"]
+    -- no allergies case
+    _ -> []
+
+
+--- 
+We should store a dictionary of allergens and their powers of two per the README
+Or should we just use "match"
+
